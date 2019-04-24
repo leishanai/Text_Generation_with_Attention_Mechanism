@@ -59,7 +59,7 @@ def read_data(data_path):
         read().strip().split('\n')
     # Split every line into pairs and normalize
     pairs = []
-    for i in range(0,len(lines)-1,2): # be careful of step=2
+    for i in range(0,len(lines)-1): # be careful of step=2
         pairs.append([normalizeString(lines[i]), normalizeString(lines[i+1])])
     return pairs
 
@@ -78,7 +78,7 @@ def prep_data(data_dir, MAX_LENGTH):
     '''
     Return vocab instance, and trimed and cleaned pairs
     '''
-    # obtain paths from all files    
+    # obtain all data_paths from data_dir    
     data_list = []
     for subdir, dirs, files in os.walk(data_dir):
         for file in files:
@@ -86,18 +86,22 @@ def prep_data(data_dir, MAX_LENGTH):
     pairs_total = []
     # instantial vocab class
     lang = vocab()
+    print('<====================| Data Cleaning |====================>')
     # iterate through all files
-    for data_path in data_list:
-        pairs = read_data(data_path)
-        print("<=== Read %s sentence pairs from %s ===>" % (len(pairs), data_path))
-        pairs = filterPairs(pairs, MAX_LENGTH)
-        print("<=== Trimmed to %s sentence pairs ===>" % len(pairs))
-        pairs_total += pairs
+    for itr, data_path in enumerate(data_list):
+        # get pairs
+        pairs_raw = read_data(data_path)
+        # filter by max_length
+        pairs_trimed = filterPairs(pairs_raw, MAX_LENGTH)     
+        # concatenate pairs
+        pairs_total += pairs_trimed
         # initialize vocab instance
-        for pair in pairs:
+        for pair in pairs_trimed:
             lang.addSentence(pair[0])
             lang.addSentence(pair[1])
-        print("<=== Counted {} unique words ===>".format(lang.n_words))
+        print("<===| Read {:d} sentence pairs from Doc {:d} | Trimmed to {:d} sentence pairs | Counted {:d} unique words in total|===>\n"
+            .format(len(pairs_raw), itr+1, len(pairs_trimed),lang.n_words))
+
     return lang, pairs_total
 
 

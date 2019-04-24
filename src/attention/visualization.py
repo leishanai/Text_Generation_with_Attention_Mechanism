@@ -12,7 +12,9 @@ mpl.rcParams["font.size"] = 18 # font size
 
 
 def evaluate(input_sentence, lang, encoder, decoder, max_length, USE_CUDA=True):
-
+    '''
+    this function does greedy search
+    '''
     SOS_token = 1
     EOS_token = 2
     
@@ -109,15 +111,12 @@ def loss_plot(loss_train, loss_test):
     fig, ax = plt.subplots(figsize=(10,6))
     n = len(loss_train)
     xtcks = np.arange(1, n+1)
-    print(n)
     ax.set_title('Learning Curve')
-    ax.set_xlabel('Epochs')
+    ax.set_xlabel('Training epochs')
     ax.set_ylabel('Loss')
-    ax.set_xticks(xtcks)
     ax.plot(xtcks, loss_train, label='Train')
     ax.plot(xtcks, loss_test, label='Test')
     ax.legend()
-
     plt.savefig('../images/learning_curve.jpg')
     plt.show()
 

@@ -9,11 +9,11 @@ lang = torch.load('save/vocab.pt')
 encoder = torch.load('save/encoder.pt')
 decoder = torch.load('save/decoder.pt')
 # load losses
-loss_train = np.load('save/loss_train.npy')
-loss_test = np.load('save/loss_test.npy')
+loss = np.load('save/loss.npy')
+
 
 # plot loss
-loss_plot(loss_train, loss_test)
+loss_plot(loss[0], loss[1])
 # attention visualization
 max_output = 10
 input_sentence = 'jumpman jumpman jumpman jumpman'

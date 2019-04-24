@@ -1,5 +1,7 @@
+import os
 import time
 import random
+import numpy as np
 import torch
 from torch import optim
 from torch.autograd import Variable
@@ -143,47 +145,52 @@ def validation(input_batches, input_lengths, target_batches, target_lengths, enc
 
 
 def trainIter(n_epochs, batch_size, lang, pairs, encoder, decoder, clip, 
-    learning_rate = 0.0001, decoder_learning_ratio = 5.0):
-    
+    encoder_learning_rate, decoder_learning_rate, test_size, random_state=666):
+    # batch_size = 1 # stochastic is reproduce
     # setup start time
     start = time.time()
-    # lists to save losses
-    loss_train_array = []
-    loss_test_array = []
     # train/test split
-    pairs_train, pairs_test = train_test_split(pairs, test_size=0.2, random_state=666)
+    pairs_train, pairs_test = train_test_split(pairs, test_size = test_size, random_state = random_state)
     # initialize optimizer
-    encoder_optimizer = optim.Adam(encoder.parameters(), lr=learning_rate)
-    decoder_optimizer = optim.Adam(decoder.parameters(), lr=learning_rate * decoder_learning_ratio)
+    encoder_optimizer = optim.Adam(encoder.parameters(), lr = encoder_learning_rate)
+    decoder_optimizer = optim.Adam(decoder.parameters(), lr = decoder_learning_rate)
+    # load loss_array or create one if does not exist
+    if os.path.exists('save/loss.npy'):
+        loss_array = np.load('save/loss.npy')
+    else:
+        loss_array = np.array([[], []]) # initialize an empty 2d array
     # train loop starts from here
-    epoch = 0
-    while epoch < n_epochs:
-        if epoch == 0: print('<==================== Let the fun begin ====================>')
-        if epoch%10 ==0: print('<### {} epochs to run ###>'.format(n_epochs - epoch))
-        epoch += 1
-        # run len(pairs)//batch_size times      
-        for itr in range(len(pairs)//batch_size):
-            print('<=== Training on batch {}/{}... ===>'.format(itr+1, len(pairs)//batch_size))
+    for epoch in range(1, n_epochs+1):
+        # find the number of loops to run in one epoch   
+        # n_iters = 1 # this is for fast debugging purpose
+        n_iters = len(pairs)//batch_size
+        # iteration of batches starts      
+        for itr in range(1, n_iters+1):
+            print('<===| Training on epoch:{:d}/{:d} batch:{:d}/{:d}... | {:s} |===>'
+                .format(epoch, n_epochs, itr, n_iters, timer(start, itr / n_iters)))
             # Get training data for this cycle
             input_batches, input_lengths, target_batches, target_lengths = random_batch(batch_size, lang, pairs_train)
             # Run the train function
             loss_train = train(input_batches, input_lengths, target_batches, target_lengths,
                 encoder, decoder, encoder_optimizer, decoder_optimizer, clip)
-        
+            # save model every batch
+            torch.save(encoder, 'save/encoder.pt')
+            torch.save(decoder, 'save/decoder.pt')
         #####################################################################################################
         # validation
-        print('<=== Testing on validation... ===>')
         valid_size = len(pairs_test)
+        print('<===| Testing on validation set with {} sentence pairs, please be patient! |===>\n'.format(valid_size))
         input_batches, input_lengths, target_batches, target_lengths = random_batch(valid_size, lang, pairs_test)
         # get loss from validation
         loss_test = validation(input_batches, input_lengths, target_batches, target_lengths, encoder, decoder)
-        
         #####################################################################################################
-        # append metric to array for each epoch
-        loss_train_array.append(loss_train)
-        loss_test_array.append(loss_test)
         # print out loss for each epoch
-        print_summary = "<=== %d%% trained ===> loss_train: %.3f loss_test: %.3f <=== %s ===>" % (epoch / n_epochs * 100, loss_train, loss_test, timer(start, epoch / n_epochs))
-        print(print_summary)
-
-    return loss_train_array, loss_test_array
+        print("<===| {:.1%} assignment done | loss_train:{:.1f} | loss_test:{:.1f} | {:s} |===>\n"
+        .format(epoch / n_epochs, loss_train, loss_test, timer(start, epoch / n_epochs)))
+        # one epoch done!
+        epoch += 1
+        ######################################################################################################
+        # write losses into file for every epoch
+        loss_new = np.array([[loss_train, loss_test]])
+        np.concatenate((loss_array, loss_new.T), axis=1)
+        np.save('save/loss.npy', loss_array)
