@@ -1,7 +1,9 @@
-Run ```train.py``` to train model.
+# How to use the model?
 
-Run ```evaluate.py``` to generate lyrics for different artists.
+1. Run ```train.py``` to train model.
 
-Pretrained model by myself are in save folder.
+2. Run ```evaluate.py``` to generate lyrics for different artists.
 
-Source files are placed in attention folder.
+3. Model trained by myself are stored in save folder.
+
+4. Source files are placed in attention folder.

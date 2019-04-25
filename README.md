@@ -118,37 +118,37 @@ else:
 
 ## Evaluation and Visualization
 
-Let us get away from tedious part and take a look what can be generated from the model we built.
+Let us get away from tedious part and take a look at what can be generated from the model we built.
 
 ### 1. Drake's Lyrics Generator
 
-Drake one                         | Drake two
+Drake #1                          | Drake #2
 :-------------------------:       | :-------------------------:
 <img src="images/drake1.jpg"  ></img> | <img src="images/drake2.jpg"  ></img>
 
-Drake three                       | Drake four
+Drake #3                          | Drake #4
 :-------------------------:       | :-------------------------:
 <img src="images/drake3.jpg"  ></img> | <img src="images/drake4.jpg"  ></img>
 
 
 ### 2. Eminem's Lyrics Generator
 
-Eminem one                        | Eminem two
+Eminem #1                         | Eminem #2
 :-------------------------:       | :-------------------------:
 <img src="images/eminem1.jpg"  ></img> | <img src="images/eminem2.jpg"  ></img>
 
-Eminem thre                       | Eminem four
+Eminem #3                         | Eminem #4
 :-------------------------:       | :-------------------------:
 <img src="images/eminem3.jpg"  ></img> | <img src="images/eminem4.jpg"  ></img>
 
 
 ### 3. Michael Jackson's Lyrics Generator
 
-MJ one                            | MJ two
+MJ #1                             | MJ #2
 :-------------------------:       | :-------------------------:
 <img src="images/mj1.jpg"  ></img> | <img src="images/mj2.jpg"  ></img>
 
-MJ three                          | MJ four
+MJ #3                             | MJ #4
 :-------------------------:       | :-------------------------:
 <img src="images/mj3.jpg"  ></img> | <img src="images/mj4.jpg"  ></img>
 
