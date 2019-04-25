@@ -15,15 +15,21 @@ loss = np.load('save/drake/loss.npy')
 # plot loss
 # loss_plot(loss[0], loss[1])
 # attention visualization
-max_output = 10
+max_output = 20
+color = 'Greens'
+
 input_sentence = 'jumpman jumpman jumpman'
 save_path = '../images/drake1.jpg'
-visualize(input_sentence, lang, encoder, decoder, max_output, save_path)
+visualize(input_sentence, lang, encoder, decoder, max_output, save_path, color)
 
-input_sentence = 'jumpman jumpman jumpman jumpman'
+input_sentence = 'i guess you lose some and win some'
 save_path = '../images/drake2.jpg'
-visualize(input_sentence, lang, encoder, decoder, max_output, save_path)
+visualize(input_sentence, lang, encoder, decoder, max_output, save_path, color)
 
-input_sentence = 'you only live once'
+input_sentence = 'people drain me energy'
 save_path = '../images/drake3.jpg'
-visualize(input_sentence, lang, encoder, decoder, max_output, save_path)
+visualize(input_sentence, lang, encoder, decoder, max_output, save_path, color)
+
+input_sentence = 'them boys up to something'
+save_path = '../images/drake4.jpg'
+visualize(input_sentence, lang, encoder, decoder, max_output, save_path, color)

@@ -71,11 +71,11 @@ def evaluate(input_sentence, lang, encoder, decoder, max_length, USE_CUDA=True):
     
     return decoded_words, decoder_attentions[:di+1, :len(encoder_outputs)]
 
-def plot_attention(input_sentence, output_words, attentions, save_path):
+def plot_attention(input_sentence, output_words, attentions, save_path, color):
     plt.rcParams["axes.grid"] = False # disable grid of plots
     # Set up figure with colorbar
     fig, ax = plt.subplots(figsize=(10,8))
-    att = ax.imshow(attentions.numpy(), cmap='Greens', aspect='auto')
+    att = ax.imshow(attentions.numpy(), cmap=color, aspect='auto')
     cbar = fig.colorbar(att)
 
     # add title
@@ -92,7 +92,7 @@ def plot_attention(input_sentence, output_words, attentions, save_path):
 #####################################################################################
 # visualize attention with give seed text
 
-def visualize(input_sentence, lang, encoder, decoder, max_length, save_path, target_sentence=None, USE_CUDA=True):
+def visualize(input_sentence, lang, encoder, decoder, max_length, save_path, color, target_sentence=None, USE_CUDA=True):
     # function does both evaluate and plot
     output_words, attentions = evaluate(input_sentence, lang, encoder, decoder, max_length, USE_CUDA=True)
     output_sentence = ' '.join(output_words)
@@ -101,7 +101,7 @@ def visualize(input_sentence, lang, encoder, decoder, max_length, save_path, tar
         print('<=== OG_lyrics: {} ===>'.format(target_sentence))
     print('<=== Generated_lyrics: {} ===>'.format(output_sentence))
 
-    plot_attention(input_sentence, output_words, attentions, save_path)
+    plot_attention(input_sentence, output_words, attentions, save_path, color)
 
 #####################################################################################
 # plot losses from train and test
