@@ -43,6 +43,7 @@ def evaluate(input_sentence, lang, encoder, decoder, max_length, USE_CUDA=True):
 
         # Store output words and attention states
         decoded_words = []
+        # row
         decoder_attentions = torch.zeros(max_length+1, max_length+1)
         
         # Run through decoder
@@ -50,10 +51,9 @@ def evaluate(input_sentence, lang, encoder, decoder, max_length, USE_CUDA=True):
             decoder_output, decoder_hidden, decoder_attention = decoder(
                 decoder_input, decoder_hidden, encoder_outputs
             )
-            decoder_attentions[di,:decoder_attention.size(2)] += decoder_attention.squeeze(0).squeeze(0).cpu().data
-
+            decoder_attentions[di,:decoder_attention.size(2)] += decoder_attention.squeeze().cpu()
             # Choose top word from output
-            topv, topi = decoder_output.data.topk(1)
+            topv, topi = decoder_output.topk(1)
             ix = topi.item()
             if ix == EOS_token:
                 decoded_words.append('<EOS>')
@@ -71,7 +71,7 @@ def evaluate(input_sentence, lang, encoder, decoder, max_length, USE_CUDA=True):
     
     return decoded_words, decoder_attentions[:di+1, :len(encoder_outputs)]
 
-def plot_attention(input_sentence, output_words, attentions):
+def plot_attention(input_sentence, output_words, attentions, save_path):
     plt.rcParams["axes.grid"] = False # disable grid of plots
     # Set up figure with colorbar
     fig, ax = plt.subplots(figsize=(10,8))
@@ -81,18 +81,18 @@ def plot_attention(input_sentence, output_words, attentions):
     # add title
     ax.set_title('Attention Visualization')
     # Set up axes
-    ax.set_xticklabels([''] + input_sentence.split() + ['<EOS>'], rotation=0)
+    ax.set_xticklabels([''] + input_sentence.split() + ['<EOS>'], rotation=30)
     ax.set_yticklabels([''] + output_words)
     # Show label at every tick
     ax.xaxis.set_major_locator(ticker.MultipleLocator(1))
     ax.yaxis.set_major_locator(ticker.MultipleLocator(1))
-    plt.savefig('../images/attention.jpg') # should try to plot attention for each epoch
+    plt.savefig(save_path) # should try to plot attention for each epoch
     plt.show()
 
 #####################################################################################
 # visualize attention with give seed text
 
-def visualize(input_sentence, lang, encoder, decoder, max_length, target_sentence=None, USE_CUDA=True):
+def visualize(input_sentence, lang, encoder, decoder, max_length, save_path, target_sentence=None, USE_CUDA=True):
     # function does both evaluate and plot
     output_words, attentions = evaluate(input_sentence, lang, encoder, decoder, max_length, USE_CUDA=True)
     output_sentence = ' '.join(output_words)
@@ -101,7 +101,7 @@ def visualize(input_sentence, lang, encoder, decoder, max_length, target_sentenc
         print('<=== OG_lyrics: {} ===>'.format(target_sentence))
     print('<=== Generated_lyrics: {} ===>'.format(output_sentence))
 
-    plot_attention(input_sentence, output_words, attentions)
+    plot_attention(input_sentence, output_words, attentions, save_path)
 
 #####################################################################################
 # plot losses from train and test

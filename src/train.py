@@ -10,16 +10,15 @@ USE_CUDA = True
 
 # feel free to delete pretrained model and cleaned dataset
 #######################################################################################################
-# # remove embeddings
-# del_save('save/vocab.pt')
-# # remove cleaned dataset
-# del_save('save/pairs.npy')
-# # remove pretrained models
-# del_save('save/encoder.pt')
-# del_save('save/decoder.pt')
-# # remove loss_array
-# del_save('save/loss_train.npy')
-# del_save('save/loss_test.npy')
+# remove embeddings
+del_save('save/vocab.pt')
+# remove cleaned dataset
+del_save('save/pairs.npy')
+# remove pretrained models
+del_save('save/encoder.pt')
+del_save('save/decoder.pt')
+# remove loss_array
+del_save('save/loss.npy')
 
 
 #######################################################################################################
@@ -28,7 +27,7 @@ USE_CUDA = True
 hidden_size = 50 # embedding_dim, modify preprocessing.embeds accordingly if you want to change this
 # data preparation
 data_dir = '../data/pop'
-MAX_LENGTH = 80 # max length to trim
+MAX_LENGTH = 15 # max length to trim
 # load/instantiate lang and pairs
 if not ( os.path.exists('save/vocab.pt') and os.path.exists('save/pairs.npy') ):
 	lang, pairs = prep_data(data_dir, MAX_LENGTH)
@@ -65,7 +64,7 @@ if USE_CUDA:
 # Iteration, corresponding hyperparameters are given below
 
 batch_size = 100
-n_epochs = 80
+n_epochs = 30
 clip = 5.0
 encoder_learning_rate = 0.001
 decoder_learning_rate = 0.003

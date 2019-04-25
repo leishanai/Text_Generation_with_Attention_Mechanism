@@ -125,6 +125,7 @@ def random_batch(batch_size, lang, pairs, USE_CUDA=True):
 	'''
 	input -> batch_size
 	return -> input/output of a batch, array of lengths of input/output
+	batched data -> max_len x batch_size (note that this is required size feeding to gru layer)
 	'''
 	PAD_token = 0
 	EOS_token = 2
@@ -178,6 +179,7 @@ def pretrained(glove_path):
 def embeds(lang, EMBEDDING_DIM, non_trainable=True):
     '''
     match pretrained embedding and dataset
+    embedding -> unique_words x emb_size
     '''
     # load glove
     glove_path = '../data/glove.6B.50d.txt'
