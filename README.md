@@ -27,7 +27,7 @@ Neural network has capability to process complex data such as human languange, i
 
 Recurrent network can process sequences as input by utilizing hidden unit in a sequential order. However, RNN with LSTM (or GRU) as basic unit does not hold long term dependencies. It is easy to observe output with repetition pattern from a vanilla RNN.
 
-<div align=center><img src="images/seq2seq.jpg" width="70%" ></div>
+<div align=center><img src="images/rnn.png" width="70%" ></div>
 
 To resolve the issue, one can resort to attention mechanism. Attention mechanism calculates the importances of words in output and input. Therefore, it is a very efficient way to generate output with different contributions from all input. The concept was first referred and clearly stated from [Attention Is All You Need](https://papers.nips.cc/paper/7181-attention-is-all-you-need.pdf).
 
@@ -36,11 +36,11 @@ In this project, I focused on how to implement attention mechanism into vanilla 
 
 ## Data Preparation
 
-Since the lyrics generator is based on word-level language model, we removed all unnecessary punctuations. Note that, it is not necessary to punctuations and keeping punctuation will make the output look more fluent. We will add them back to our model in the future.
+Since the lyrics generator is based on word-level language model, we removed all unnecessary punctuations. Note that, it is not necessary to remove punctuations and keeping punctuation will make the output look more fluent. We will add them back to our model in the future.
 
 ### 1. 'PAD', 'SOS' and 'EOS'
 
-We added 'PAD', 'SOS', 'EOS' tokens to word2index dictionary. 'PAD' is helpful when sequences come with different lengths. However, processing padded sequences can be expensive as they bring zero information. However, pytorch provides a decent way to deal with it. We will be using ```pad_packed_sequence, pack_padded_sequence``` while feeding data into the model. SOS and EOS help stop lyrics generation at early time. 
+We added 'PAD', 'SOS', 'EOS' tokens to word2index dictionary. 'PAD' is helpful when sequences come with different lengths. However, processing padded sequences can be expensive as they bring zero information. Fortunately, pytorch provides a decent way to deal with it. We will be using ```pad_packed_sequence, pack_padded_sequence``` while feeding data into the model. SOS and EOS help stop lyrics generation at early time. 
 
 ```python
 class vocab:
@@ -91,11 +91,11 @@ As a singer can only have 500 songs at most in her/his career, it means the data
 
 ## Model Structure
 
-Our model is built on seq2seq languange model. However, we implemented more elements to the model.
+Our model is built on seq2seq languange model. However, we implemented more elements to improve model.
 
 ### 1. Bidirectional GRU Layer
 
-We built bidirectional GRU layer to encoder. This yields more computation, however, bidirection meaning the model is not only aware of the history, but also feeling the future connection. This is extremely important while building attention mechanism. Instead of obtaining the strongest impact from the last input, the importances of all words are considered. Model "attention" determines the relative contributions of the words. In other words, attention mechanism creates new features that capture the connection between words from input and output. It provides an innovative way to resolve long term dependency issue.
+We built bidirectional GRU layer to encoder. This brings more computation, however, bidirection meaning the model is not only aware of the history, but also feeling the future connection. This is extremely important while building attention mechanism. Instead of obtaining the strongest impact from the last input, the importances of all words are considered. Model "attention" determines the relative contributions of the words. In other words, attention mechanism creates new features that capture the connection between words from input and output. It provides an innovative way to resolve long term dependency issue.
 
 <div align=center><img src="images/attention.jpg" width="70%" ></div>
 
