@@ -32,7 +32,7 @@ Recurrent network can process sequences as input by utilizing hidden unit in a s
 To resolve the issue, one can resort to attention mechanism. Attention mechanism calculates the importances of words in output and input. Therefore, it is a very efficient way to generate output with different contributions from all input. The concept was first referred and clearly stated from [Attention Is All You Need](https://papers.nips.cc/paper/7181-attention-is-all-you-need.pdf).
 
 
-In this project, I focused on how to implement attention mechanism into vanilla seq2seq model. (pic from cs224n stanford)
+In this project, I focused on how to implement attention mechanism into vanilla seq2seq model.
 
 ## Data Preparation
 
@@ -95,7 +95,7 @@ Our model is built on seq2seq languange model. However, we implemented more elem
 
 ### 1. Bidirectional GRU Layer
 
-We built bidirectional GRU layer to encoder. This brings more computation, however, bidirection meaning the model is not only aware of the history, but also feeling the future connection. This is extremely important while building attention mechanism. Instead of obtaining the strongest impact from the last input, the importances of all words are considered. Model "attention" determines the relative contributions of the words. In other words, attention mechanism creates new features that capture the connection between words from input and output. It provides an innovative way to resolve long term dependency issue.
+We built bidirectional GRU layer to encoder. This brings more computation, however, bidirection meaning the model is not only aware of the history, but also feeling the future connection. This is extremely important while building attention mechanism. Instead of obtaining the strongest impact from the last input, the importances of all words are considered. Model "attention" determines the relative contributions of the words. In other words, attention mechanism creates new features that capture the connection between words from input and output. It provides an innovative way to resolve long term dependency issue. (pic from cs224n stanford)
 
 <div align=center><img src="images/attention.jpg" width="70%" ></div>
 
