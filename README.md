@@ -54,7 +54,7 @@ class vocab:
 
 ### 2. Batch Data
 
-As the model is quite large, training in a mini-batch fashion could significantly reduce the computation time and acquire more stablized results. Function ```random_batch``` bootraps data with shape max_sequence_length x batch_size x hidden_size.
+As the model is quite large, training in a mini-batch fashion could significantly reduce the computation time and acquire more stablized results. Function ```random_batch``` bootraps data with shape 'max_sequence_length' x 'batch_size' x 'hidden_size'.
 
 ```python
 def random_batch(batch_size, lang, pairs, USE_CUDA=True):
@@ -118,7 +118,9 @@ else:
 
 ## Evaluation and Visualization
 
-Let us get away from tedious part and take a look at what can be generated from the model we built.
+Let us get away from tedious part and take a look at what can be generated from the model we built. Words in x-axis forms seed text sending into the model, while y-axis is generated lyrics from the model. The maximum length of output was set to 15 words. However, if the model generates EOS token earlier than that, the generation will stop.
+
+The heatmaps show the connection between input and output. The darker the color, the closer the reation between two words. Attention mechanism provides a decent way to visualize 'black box' of a complicated neural network.
 
 ### 1. Drake's Lyrics Generator
 
@@ -152,6 +154,7 @@ MJ #3                             | MJ #4
 :-------------------------:       | :-------------------------:
 <img src="images/mj3.jpg"  ></img> | <img src="images/mj4.jpg"  ></img>
 
+As you can notice, there is some magic output from Michale Jackson's generator. When 'heal the world' is fed into the model, it generates 'make it a better place'. WOW!
 
 ## Concluding Remarks and Future Work
 
